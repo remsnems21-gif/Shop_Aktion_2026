@@ -110,6 +110,21 @@ button,select{font-family:inherit;cursor:pointer}
 .empty{text-align:center;color:#475569;padding:40px;font-size:15px}
 .hidden{display:none}
 
+/* Quiz View */
+.quiz-back-btn{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.3);border-radius:8px;padding:10px 18px;font-size:14px;font-weight:600;margin-bottom:20px;cursor:pointer}
+.quiz-back-btn:hover{background:rgba(59,130,246,.25)}
+.quiz-section{background:#1e293b;border-radius:14px;padding:24px;margin-bottom:16px;border:1px solid #334155}
+.quiz-heading{font-size:18px;font-weight:700;margin-bottom:12px;color:#f1f5f9}
+.quiz-lang-tabs{display:flex;gap:4px;margin-bottom:16px}
+.ql-btn{padding:6px 16px;border:1px solid #334155;border-radius:6px;background:transparent;color:#94a3b8;font-size:13px;font-weight:600;cursor:pointer}
+.ql-btn.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
+.quiz-content ul,.quiz-content ol{padding-left:1.4rem;display:flex;flex-direction:column;gap:10px}
+.quiz-content li{font-size:15px;line-height:1.55;color:#cbd5e1}
+.quiz-prize{margin-top:18px;text-align:center;font-size:15px;padding:16px;border:1px solid rgba(255,215,0,.2);border-radius:12px;background:rgba(255,215,0,.05);color:#fbbf24}
+.quiz-start-btn{display:inline-block;background:linear-gradient(135deg,#3b82f6,#7c3aed);color:#fff;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:700;text-decoration:none;margin-bottom:10px}
+.quiz-start-btn:hover{opacity:.9}
+.quiz-link-note{color:#64748b;font-size:13px;margin-top:8px}
+
 /* Desktop responsive */
 @media(min-width:768px){
   .header{padding:18px 28px}
@@ -151,11 +166,12 @@ button,select{font-family:inherit;cursor:pointer}
         <h1 class="header-title" data-i18n="title">Shop-Aktion 2026</h1>
       </div>
       <div class="header-right">
-        <a id="quiz-link" href="#" target="_blank" rel="noopener noreferrer" class="quiz-btn" data-i18n="quiz">Quiz starten →</a>
+        <button class="quiz-btn" onclick="switchView('quiz')" data-i18n="quiz">Quiz →</button>
             <button onclick="loadAll()" class="quiz-btn" id="refresh-btn" title="Refresh">🔄</button>
         <div class="lang-toggle">
           <button class="lang-btn active" onclick="switchLang('de')" id="lang-de">DE</button>
           <button class="lang-btn" onclick="switchLang('fr')" id="lang-fr">FR</button>
+          <button class="lang-btn" onclick="switchLang('it')" id="lang-it">IT</button>
         </div>
       </div>
     </div>
@@ -203,6 +219,94 @@ button,select{font-family:inherit;cursor:pointer}
       </div>
       <div id="open-cards"></div>
     </div>
+    <div id="view-quiz" class="hidden">
+      <button class="quiz-back-btn" onclick="switchView('dashboard')">← <span data-i18n="quizBack">Zurück</span></button>
+
+      <div class="quiz-section">
+        <h2 class="quiz-heading" data-i18n="quizRulesTitle">Spielregeln</h2>
+        <div class="quiz-lang-tabs">
+          <button class="ql-btn active" onclick="switchQuizLang('rules','de',this)">DE</button>
+          <button class="ql-btn" onclick="switchQuizLang('rules','fr',this)">FR</button>
+          <button class="ql-btn" onclick="switchQuizLang('rules','it',this)">IT</button>
+        </div>
+        <div id="rules-de" class="quiz-content">
+          <ul>
+            <li>Der Spielleiter (PV-Mitarbeitende/r) liest jede Frage laut vor.</li>
+            <li>Pro Frage habt ihr <strong>60 Sekunden</strong> Zeit für eure Antwort.</li>
+            <li>Es gibt Single-Choice- und Multiple-Choice-Fragen – der Spielleiter sagt jeweils an, welcher Typ es ist.</li>
+            <li>Ihr spielt gemeinsam als Shop gegen alle anderen Shops.</li>
+            <li>Besprecht euch kurz im Team und gebt eine gemeinsame Antwort ab.</li>
+            <li>Das aktuelle Ranking ist jederzeit in der Shop-Applikation (Oreo) sichtbar.</li>
+          </ul>
+          <div class="quiz-prize">🥇🥈🥉<br>Die 3 besten Shops gewinnen einen besonderen Preis!</div>
+        </div>
+        <div id="rules-fr" class="quiz-content hidden">
+          <ul>
+            <li>L'animateur (collaborateur/trice RP) lit chaque question à voix haute.</li>
+            <li>Vous avez <strong>60 secondes</strong> par question pour répondre.</li>
+            <li>Il y a des questions à choix unique et à choix multiple – l'animateur annonce le type à chaque fois.</li>
+            <li>Vous jouez ensemble en tant que shop contre tous les autres shops.</li>
+            <li>Discutez brièvement en équipe et donnez une réponse commune.</li>
+            <li>Le classement actuel est visible à tout moment dans l'application Shop (Oreo).</li>
+          </ul>
+          <div class="quiz-prize">🥇🥈🥉<br>Les 3 meilleurs shops remportent un prix spécial !</div>
+        </div>
+        <div id="rules-it" class="quiz-content hidden">
+          <ul>
+            <li>Il moderatore (collaboratore/trice RP) legge ogni domanda ad alta voce.</li>
+            <li>Per ogni domanda avete <strong>60 secondi</strong> di tempo per rispondere.</li>
+            <li>Ci sono domande a scelta singola e a scelta multipla – il moderatore annuncia ogni volta il tipo.</li>
+            <li>Giocate insieme come shop contro tutti gli altri shop.</li>
+            <li>Discutete brevemente in team e date una risposta comune.</li>
+            <li>La classifica attuale è sempre visibile nell'applicazione Shop (Oreo).</li>
+          </ul>
+          <div class="quiz-prize">🥇🥈🥉<br>I 3 migliori shop vincono un premio speciale!</div>
+        </div>
+      </div>
+
+      <div class="quiz-section">
+        <h2 class="quiz-heading" data-i18n="quizPrepTitle">Vorbereitungsfragen für PV-MA</h2>
+        <div class="quiz-lang-tabs">
+          <button class="ql-btn active" onclick="switchQuizLang('prep','de',this)">DE</button>
+          <button class="ql-btn" onclick="switchQuizLang('prep','fr',this)">FR</button>
+          <button class="ql-btn" onclick="switchQuizLang('prep','it',this)">IT</button>
+        </div>
+        <div id="prep-de" class="quiz-content">
+          <ol>
+            <li>Hast du die Fragen vorher durchgelesen und verstanden?</li>
+            <li>Kennst du die richtigen Antworten zu allen Fragen?</li>
+            <li>Hast du das Kahoot-Quiz auf deinem Gerät vorbereitet und getestet?</li>
+            <li>Weisst du, wie du zwischen Single-Choice und Multiple-Choice unterscheidest und den Shop-Teams ansagst?</li>
+            <li>Ist die Internetverbindung im Shop stabil genug für das Quiz?</li>
+            <li>Hast du die Goodies / Preise für die Gewinner dabei?</li>
+          </ol>
+        </div>
+        <div id="prep-fr" class="quiz-content hidden">
+          <ol>
+            <li>As-tu lu et compris les questions au préalable ?</li>
+            <li>Connais-tu les bonnes réponses à toutes les questions ?</li>
+            <li>As-tu préparé et testé le quiz Kahoot sur ton appareil ?</li>
+            <li>Sais-tu comment distinguer les questions à choix unique des questions à choix multiple et l'annoncer aux équipes ?</li>
+            <li>La connexion Internet dans le shop est-elle suffisamment stable pour le quiz ?</li>
+            <li>As-tu les goodies / prix pour les gagnants avec toi ?</li>
+          </ol>
+        </div>
+        <div id="prep-it" class="quiz-content hidden">
+          <ol>
+            <li>Hai letto e compreso le domande in anticipo?</li>
+            <li>Conosci le risposte corrette a tutte le domande?</li>
+            <li>Hai preparato e testato il quiz Kahoot sul tuo dispositivo?</li>
+            <li>Sai come distinguere tra domande a scelta singola e multipla e annunciarlo ai team?</li>
+            <li>La connessione Internet nello shop è sufficientemente stabile per il quiz?</li>
+            <li>Hai con te i goodies / premi per i vincitori?</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="quiz-section" style="text-align:center">
+        <a href="#" id="quiz-start-link" class="quiz-start-btn" target="_blank" rel="noopener noreferrer" data-i18n="quizStart">Quiz starten</a>
+      </div>
+    </div>
   </main>
 </div>
 
@@ -222,15 +326,16 @@ button,select{font-family:inherit;cursor:pointer}
 // ========== CONFIG ==========
 const SB = "https://axhuownywlrhmvfyvdwl.supabase.co";
 const SK = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4aHVvd255d2xyaG12Znl2ZHdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2MjkxNDEsImV4cCI6MjA5MTIwNTE0MX0.cZWtrmx23fVrqYNzMh7vgzKCg4RTvMHyixsvIa6Z0RQ";
-const QUIZ_URL = "https://forms.office.com"; // ← Quiz-Link hier
+const QUIZ_URL = "https://forms.office.com/e/R2qV4xmvXc"; // ← Quiz-Link hier
 const H = {"apikey":SK,"Authorization":"Bearer "+SK,"Content-Type":"application/json","Prefer":"return=representation"};
 
 // ========== i18n ==========
 const T={
-  de:{title:"Shop-Aktion 2026",dashboard:"Dashboard",list:"Routen",open:"Offen",visited:"Besucht",notVisited:"Nicht besucht",openStatus:"Offen",progress:"Fortschritt",of:"/",shops:"Shops",route:"Route",team:"Team",markVisited:"✓",markNotVisited:"✗",reset:"↩",comment:"Kommentar / Begründung",save:"Speichern",cancel:"Abbrechen",quiz:"Quiz →",filterRegion:"Alle Gebiete",filterStatus:"Alle Status",filterMember:"Alle Mitglieder",goodies:"Goodies",overdue:"Überfällig",today:"Heute",noShops:"Keine Shops",error:"Verbindungsfehler",ma:"MA",emergency:"Notfall",addr:"Adresse",expand:"Details",allVisited:"Alle besucht ✓",markAll:"Alle besucht ✓"},
-  fr:{title:"Action Shop 2026",dashboard:"Tableau de bord",list:"Routes",open:"Ouverts",visited:"Visité",notVisited:"Non visité",openStatus:"Ouvert",progress:"Progrès",of:"/",shops:"Shops",route:"Itinéraire",team:"Équipe",markVisited:"✓",markNotVisited:"✗",reset:"↩",comment:"Commentaire / Raison",save:"Enregistrer",cancel:"Annuler",quiz:"Quiz →",filterRegion:"Toutes les régions",filterStatus:"Tous les statuts",filterMember:"Tous les membres",goodies:"Goodies",overdue:"En retard",today:"Aujourd'hui",noShops:"Aucun shop",error:"Erreur de connexion",ma:"Employés",emergency:"Urgence",addr:"Adresse",expand:"Détails",allVisited:"Tous visités ✓",markAll:"Tous visités ✓"}
+  de:{title:"Shop-Aktion 2026",dashboard:"Dashboard",list:"Routen",open:"Offen",visited:"Besucht",notVisited:"Nicht besucht",openStatus:"Offen",progress:"Fortschritt",of:"/",shops:"Shops",route:"Route",team:"Team",markVisited:"✓",markNotVisited:"✗",reset:"↩",comment:"Kommentar / Begründung",save:"Speichern",cancel:"Abbrechen",quiz:"Quiz →",filterRegion:"Alle Gebiete",filterStatus:"Alle Status",filterMember:"Alle Mitglieder",goodies:"Goodies",overdue:"Überfällig",today:"Heute",noShops:"Keine Shops",error:"Verbindungsfehler",ma:"MA",emergency:"Notfall",addr:"Adresse",expand:"Details",allVisited:"Alle besucht ✓",markAll:"Alle besucht ✓",quizBack:"Zurück",quizRulesTitle:"Spielregeln",quizPrepTitle:"Vorbereitungsfragen für PV-MA",quizStart:"Quiz starten",quizLinkNote:""},
+  fr:{title:"Action Shop 2026",dashboard:"Tableau de bord",list:"Routes",open:"Ouverts",visited:"Visité",notVisited:"Non visité",openStatus:"Ouvert",progress:"Progrès",of:"/",shops:"Shops",route:"Itinéraire",team:"Équipe",markVisited:"✓",markNotVisited:"✗",reset:"↩",comment:"Commentaire / Raison",save:"Enregistrer",cancel:"Annuler",quiz:"Quiz →",filterRegion:"Toutes les régions",filterStatus:"Tous les statuts",filterMember:"Tous les membres",goodies:"Goodies",overdue:"En retard",today:"Aujourd'hui",noShops:"Aucun shop",error:"Erreur de connexion",ma:"Employés",emergency:"Urgence",addr:"Adresse",expand:"Détails",allVisited:"Tous visités ✓",markAll:"Tous visités ✓",quizBack:"Retour",quizRulesTitle:"Règles du jeu",quizPrepTitle:"Questions de préparation pour les coll. RP",quizStart:"Lancer le quiz",quizLinkNote:""},
+  it:{title:"Azione Shop 2026",dashboard:"Dashboard",list:"Percorsi",open:"Aperti",visited:"Visitato",notVisited:"Non visitato",openStatus:"Aperto",progress:"Progresso",of:"/",shops:"Shop",route:"Percorso",team:"Team",markVisited:"✓",markNotVisited:"✗",reset:"↩",comment:"Commento / Motivo",save:"Salva",cancel:"Annulla",quiz:"Quiz →",filterRegion:"Tutte le regioni",filterStatus:"Tutti gli stati",filterMember:"Tutti i membri",goodies:"Goodies",overdue:"In ritardo",today:"Oggi",noShops:"Nessuno shop",error:"Errore di connessione",ma:"Collaboratori",emergency:"Emergenza",addr:"Indirizzo",expand:"Dettagli",allVisited:"Tutti visitati ✓",markAll:"Tutti visitati ✓",quizBack:"Indietro",quizRulesTitle:"Regole del gioco",quizPrepTitle:"Domande di preparazione per i coll. RP",quizStart:"Avvia il quiz",quizLinkNote:""}
 };
-const WD={de:{Montag:"Mo",Dienstag:"Di",Mittwoch:"Mi",Donnerstag:"Do",Freitag:"Fr"},fr:{Montag:"Lu",Dienstag:"Ma",Mittwoch:"Me",Donnerstag:"Je",Freitag:"Ve"}};
+const WD={de:{Montag:"Mo",Dienstag:"Di",Mittwoch:"Mi",Donnerstag:"Do",Freitag:"Fr"},fr:{Montag:"Lu",Dienstag:"Ma",Mittwoch:"Me",Donnerstag:"Je",Freitag:"Ve"},it:{Montag:"Lu",Dienstag:"Ma",Mittwoch:"Me",Donnerstag:"Gi",Freitag:"Ve"}};
 
 let lang=localStorage.getItem("sa-lang")||"de", L=T[lang];
 let routes=[], details=[], expanded={}, currentView="dashboard", modalShop=null;
@@ -247,6 +352,7 @@ function switchLang(l){
   lang=l;L=T[l];localStorage.setItem("sa-lang",l);
   $("lang-de").className=l==="de"?"lang-btn active":"lang-btn";
   $("lang-fr").className=l==="fr"?"lang-btn active":"lang-btn";
+  $("lang-it").className=l==="it"?"lang-btn active":"lang-btn";
   document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.getAttribute("data-i18n");if(T[l][k])el.textContent=T[l][k]});
   renderAll();
 }
@@ -287,9 +393,9 @@ async function loadAll(){
 function switchView(v){
   currentView=v;
   expanded={};
-  ["dashboard","list","open"].forEach(x=>{
+  ["dashboard","list","open","quiz"].forEach(x=>{
     $("view-"+x).classList.toggle("hidden",x!==v);
-    $("nav-"+x).classList.toggle("active",x===v);
+    if($("nav-"+x)) $("nav-"+x).classList.toggle("active",x===v);
   });
   if(v==="list"){buildFilters();renderList()}
   if(v==="open"){buildOpenFilters();renderOpen()}
@@ -359,7 +465,7 @@ function routeCardHTML(r){
         <div>
           <div class="card-region">${esc(r.gebiet)}</div>
           <div class="card-meta">
-            ${wd} ${fmtDate(r.datum)} · ${r.anz_shops} Shops · ${r.anzahl_goodies} ${L.goodies}
+            ${wd} ${fmtDate(r.datum)} · ${r.anz_shops} Shops · <span style="font-weight:700;font-size:15px;color:#f59e0b">🎁 ${r.anzahl_goodies} ${L.goodies}</span>
             ${isToday(r.datum)?`<span class="today-badge">${L.today}</span>`:""}
             ${overdue?`<span class="overdue-badge">${L.overdue}</span>`:""}
           </div>
@@ -393,7 +499,7 @@ function shopItemHTML(s){
   return `<div class="shop-item" id="si-${s.id}">
     <div class="shop-status-dot" style="background:${col}"></div>
     <div class="shop-info">
-      <div class="shop-lis">${esc(s.lis||"")}</div>
+      <div class="shop-lis">LIS ${esc(s.lis||"")}</div>
       <div class="shop-name">${esc(s.shop_name)}</div>
       <div class="shop-addr">${esc(addr)}</div>
       <div class="shop-extra">${s.anzahl_ma||""} ${L.ma} · ${esc(s.emergency||"")}</div>
@@ -484,8 +590,15 @@ async function confirmNotVisited(){
   }catch(e){alert("Fehler: "+e.message)}
 }
 
+// ========== QUIZ LANG TABS ==========
+function switchQuizLang(section,l,btn){
+  ["de","fr","it"].forEach(x=>{const el=$(section+"-"+x);if(el)el.classList.toggle("hidden",x!==l)});
+  btn.parentElement.querySelectorAll(".ql-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
+
 // ========== INIT ==========
-$("quiz-link").href=QUIZ_URL;
+$("quiz-start-link").href=QUIZ_URL;
 loadAll();
 setInterval(loadAll,30000);
 </script>
